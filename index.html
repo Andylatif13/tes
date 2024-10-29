@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informasi Cuaca Maritim NTT</title>
+    <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap" rel="stylesheet">
+    <style>
+        /* Reset margin dan padding */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body styling */
+        body {
+            font-family: 'Alfa Slab One', cursive;
+            text-align: center;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0;
+        }
+
+        /* Heading styling */
+        h1, h2 {
+            margin: 0px 0;
+        }
+
+        h1 {
+            font-size: 2em;
+        }
+
+        h2 {
+            font-size: 2em;
+        }
+
+        /* Time container styling */
+        #time-container {
+            display: flex;
+            justify-content: center;
+            font-family: monospace;
+            font-size: 1.5em;
+            margin-bottom: 5px;
+        }
+
+        #content {
+            width: 95%;
+            max-width: 1200px;
+            height: 80%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        iframe, img {
+            width: 95%;
+            height: 95%;
+            border: none;
+        }
+
+        /* Gambar dengan ukuran 30% */
+        .resize-90 {
+            width: 47% !important;
+            height: auto !important;
+        }
+
+        /* Styling untuk menyembunyikan elemen */
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Judul -->
+    <h1 id="main-title">INFORMASI CUACA MARITIM NTT</h1>
+    <h2 id="sub-title">STASIUN METEOROLOGI MARITIM TENAU</h2>
+
+    <!-- Waktu dalam UTC, WIB, WITA, dan WIT -->
+    <div id="time-container">
+        <div id="time-info">
+            <span id="time-utc"></span> UTC | 
+            <span id="time-wib"></span> WIB | 
+            <span id="time-wita"></span> WITA | 
+            <span id="time-wit"></span> WIT
+        </div>
+    </div>
+
+    <!-- Konten dari sumber web yang berganti setiap 10 detik -->
+    <div id="content">
+        <iframe id="info-frame" src="https://maritim.bmkg.go.id/inawis"></iframe>
+    </div>
+
+    <script>
+        // Fungsi untuk update waktu dalam UTC, WIB, WITA, dan WIT
+        function updateTime() {
+            const now = new Date();
+            const date = now.toLocaleDateString('id-ID'); // Format tanggal Indonesia
+
+            const utcTime = `${date} ${now.toUTCString().slice(17, 25)}`;
+            const wibTime = `${date} ${now.toLocaleTimeString('id-ID', { timeZone: 'Asia/Jakarta' })}`;
+            const witaTime = `${date} ${now.toLocaleTimeString('id-ID', { timeZone: 'Asia/Makassar' })}`;
+            const witTime = `${date} ${now.toLocaleTimeString('id-ID', { timeZone: 'Asia/Jayapura' })}`;
+
+            document.getElementById('time-utc').textContent = utcTime;
+            document.getElementById('time-wib').textContent = wibTime;
+            document.getElementById('time-wita').textContent = witaTime;
+            document.getElementById('time-wit').textContent = witTime;
+        }
+
+        // Update waktu setiap detik
+        setInterval(updateTime, 1000);
+
+        // Daftar URL untuk konten yang akan ditampilkan secara bergantian
+        const urls = [
+         "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjXyhd6wLMo_Ymarhl4yd-J8cciySg2yV9NyHP2a_-U4KDYwzsL_HrMUT9NcPmFPE-aAGpinVYfaDTyGRiez5oBNkbagf_e4iZMPuRSMN6VQYAEhFGiRbNVUBeQzNkWG7G58_ye6ytGj4rCOgJHht0jo_1uxShpqnFMbidWLeFFJTHsBUBJG85AtSk-APY/s1080/53.png",
+          "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgfU9SZJZjdebqWMlK2wmyIYN1YIT-RgMK_6Nyh-wL20gSFfvvv_p6Ai5WyKuhSNSOEiRWeF-X2WAlFyHBTdt7N_pV3vt9AWzjZXlZAOS7dbvWSF2d3cGX4Ufi3eW6Wp05sZEFdTsE96-i-11Z9fNH9GORrHDucNk9jvAojnjP0cYC2vawVX1P0I7Ixl4g/s1080/P.U.01.png",
+            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEinsW6fcoVgD_-ozW7kzZ1on4khknxJbExnyMqehQNCLsrbL52-qs4ikWt7pxS3jU2uphln1CD93cDixXU20s6418TZNBpofrW8_lnppqkXhHiic6EgGbMFZdjttKSnyKCHen8Y2ymvOVzI5Q7lJsXUMclU1wFQ2UdHkEPh7Qzgvt4_VCS4gqWQ341GChk/s1080/P.U.02_.png",
+           "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjsHmR__MKEu5dVDxWFNoezQGsPiEzCcWkVXVRtej6e0Ny9VKnN_IbZLbf89uP9cGveOKzFb_dQkHzXx_3SxwU_QWFqu8Vnt4PZTYwUkup7x2GB-eLKhKRZ7gcDR3rkEEQoMdEGHn450n_Xrk4T6So84IIj9nOwr864AJZy33hYTdYQ_4ZJRe7HraD_D6k/s1080/P.U.03.png",
+            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgmsKXSBH2UMrevRCF1SYKAXXpBMHaIyX6qqaTR2WMfAlTynEp1PjJyc6GZL5bTTge4mHPzsRBH4ly9LkPEINLD4oA9eS0gyJOSWRTYXw3if5jTcG8MyVIXxPUhdy0qRFQZQxA5NE7-SBvrcY53l4qj3yj8LgeaxdUYPSgUAlEaRyfN5fjVQZ3wYj0bNXI/s1080/P.U.04.png",
+            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi7MqShbuFDAadEhBmUVtoGW5Cn4QrAv_A7Lgo9yBr6F09oFeEeepo2P3kerYGsEVIxwfXNuqHC3cuDjpgWZJeuJvyK3dwVNTlVArIs1inSZisL3kChQFAyCHL62aye3YjMKR4T5NvUbjl0DQeKFJESabGLeiH4N7SclnWKeIT7BHkpruwaRbSh7dDBPKo/s1080/P.U.05.png",
+            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEguOa9BHR0GKBP8h1WeIVo7Mzcr4bdY_VraNqGl4eXg1nnRX0q6fKLUoVf_efv-ZwNs7yD63e__LlXtNilSs3aXVozARTWtDJ0HAE7-uuczGtnBvAqXK2j8WhRlqGAcOcDISXSur8zRakMTIP4GoyZDdi5JBGb5J53oqjVvoccnuga2wDpN7NijFLp3INo/s1080/P.U.06.png",
+            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg2PiR0fNVDNKvHTDjQ3oW1Im8UcMR9my_9SByaK1vic-ew09NeYUWoUaH15MXQG5n9m76qXJ-TI_ZuSJZZqJ6C_rueHOQlcTvUTqDPXQP9jbL385Df07cBYPVoGa8LdnL53VkPT5jkGAY9m5NkejqpwW3bji_qv4Q2ceISx8H0lXY9ffwafaS-9m7I0tw/s1080/P.U.16.png",
+            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj5ph3_3SoiXAgvjYQpgCN454z9PpkdsfxKBFRcg88j270Op-G5doFlpkHFBCyRGnXvMTsduzNJyYWbXyTcQ62VhHMuemzwfKeGv6pR3L-y9htgC8kvZPK2X8dUh9vdbI0gFRxrrI1Tpdvzegw5rbXmWJmlkl1pztPfI8Hx-R99zdRmXd6CmDKXk2QgDPY/s1080/P.U.19.png",
+            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi-rzXELpxbIOFiT5wn-Mon1k16nLJ7kRwB8CZQqGJohuoQ89FQa6A2Cv621i2WaWd3oasPxoRAwtOWKbroNZExb7Fa00117KHgC2noGmIvqFcjXlnwTWwyBXSDpClDz86Gi1vpp6C-aoIfeeVhhm6NxGzRsDvhI5EQ6vf6ExvifxapchY26lJL9_eYSHg/s1080/XU014.png",
+            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi0uBxdxn_Wvo0DdjBESr9ceF9NfeLKqV7rsEa7MhcV8hapQMafxm_ZcCijF3fEzzACdsyGowbviedYVUyosmi_tYNAmqspf4S6Kmxbgod05M0z9r-5yom2J5tPxH9PlkINNGmHqwyLW_F2xQr0LHTJBo8mMMHbF-196dRcvhioJKQod3un2btTl6Bu328/s1080/XU015.png",
+            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjcsMoXWVytIMMb5RHgSN6HJjlLQD5ovDrGouw94XiV2QaR_eT-T3S7CNOmONkWvHj9WwfSeSRSM9JQPgLkag1Mg6JPYLTiU2BmXWpd8QUDxM4FdX_mFDu1xMYHpCPDnIsVWT6wii6_QJPl7WSfgjZgQbnlWBOwYI2osfGLI0ypxIWVH2P4b5dA2p1oblg/s1080/XU020.png",
+            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhnqskOv1ymSXi2fduh_RVVIhgNcK6t4hg-zBJeWOIy9nUg3OMTjXv_uev6x_g5BJp57SeQd2o9Q5JEeSA7SvnsXtZjWrnERioDgKRqLUcszPx3S5WmfejSDyXj7wY7pEorUVd-ckH_vP05C38p8bY2i_rq2nf05Xz1uuPDvGPpoC9QvH6YmOROXmKttX0/s1080/XU024.png",
+            
+            "https://peta-maritim.bmkg.go.id/render-static/w3g/wavewarning/wave_warning_ntt.png",
+            "https://peta-maritim.bmkg.go.id/render-static/w3g/2024/10/2024102812/kupang/swh.gif",
+            "https://peta-maritim.bmkg.go.id/render-static/w3g/2024/10/2024102812/kupang/mwh.gif",
+            "https://maritim.bmkg.go.id/inawis",
+            "https://satelit.bmkg.go.id/IMAGE/ANIMASI/H08_EH_NTT_m18.gif",
+            "https://cuaca.bmkg.go.id/ibf#6.95/-9.316/123.114",
+            "https://cuaca.bmkg.go.id/map#Maritim",
+              ];
+
+        let currentIndex = 0;
+
+        // Fungsi untuk mengganti sumber konten secara otomatis
+        function changeContent() {
+            const contentElement = document.getElementById("content");
+            const mainTitle = document.getElementById("main-title");
+            const subTitle = document.getElementById("sub-title");
+            const timeInfo = document.getElementById("time-info");
+            const currentURL = urls[currentIndex];
+
+            // Cek apakah URL adalah gambar
+            if (currentURL.match(/\.(jpeg|jpg|gif|png)$/) != null) {
+                if (currentIndex < 13) {
+                    contentElement.innerHTML = `<img class="resize-90" src="${currentURL}">`;
+                    mainTitle.classList.add('hidden');
+                    subTitle.classList.add('hidden');
+                    timeInfo.classList.add('hidden');
+                } else {
+                    contentElement.innerHTML = `<img src="${currentURL}">`;
+                    mainTitle.classList.remove('hidden');
+                    subTitle.classList.remove('hidden');
+                    timeInfo.classList.remove('hidden');
+                }
+            } else {
+                contentElement.innerHTML = `<iframe src="${currentURL}"></iframe>`;
+                mainTitle.classList.remove('hidden');
+                subTitle.classList.remove('hidden');
+                timeInfo.classList.remove('hidden');
+            }
+
+            currentIndex = (currentIndex + 1) % urls.length;
+        }
+
+        // Mengganti konten setiap 10 detik
+        setInterval(changeContent, 10000);
+
+        // Inisialisasi waktu dan konten saat pertama kali halaman dimuat
+        updateTime();
+    </script>
+
+</body>
+</html>
